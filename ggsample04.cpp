@@ -221,7 +221,7 @@ int GgApp::main(int argc, const char* const* argv)
 
     slerp(p, q, r, t);
 
-    qrot(mr, r);
+    qrot(mr, p);
 
     // 時刻 t にもとづく平行移動アニメーション
     float location[3];                // 現在位置
