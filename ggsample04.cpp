@@ -204,14 +204,24 @@ int GgApp::main(int argc, const char* const* argv)
 
     //起点から（1，0，0）を軸に1ラジアン回転した後の単位
     GLfloat q[4];
-    //起点から（1，0，0）を軸に1ラジアン回転するとき，時刻tの時の回転の単位四元数
+
+    //時刻tの時の回転の単位四元数
     GLfloat p[4];
-    
+
+    //終点において， (0, 0, 1) を軸に 2 ラジアン回転
+
+    GLfloat r[4];
+
     // 【宿題】ここを解答してください（下の loadIdentity() を置き換えてください）
-    loadIdentity(mr);
+    //loadIdentity(mr);
 
-    qmake(q, 1.0, 0.0, 0.0, 1);
+    qmake(q, 1.0, 0.0, 0.0, 1.0);
 
+    qmake(r, 0.0, 0.0, 1.0, 2.0);
+
+    slerp(p, q, r, t);
+
+    qrot(mr, r);
 
     // 時刻 t にもとづく平行移動アニメーション
     float location[3];                // 現在位置
