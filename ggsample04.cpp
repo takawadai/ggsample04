@@ -23,6 +23,24 @@
 // アニメーションの周期（秒）
 constexpr auto cycle{ 5.0 };
 
+//軸と回転角から単位余弦数を求める
+//参照：授業スライド
+void qmake(GLfloat* q, float x, float y, float z, float a)
+{
+  const float l{ x * x + y * y + z * z };
+  if (l != 0.0f)
+  {
+    const float s{ sqrt(l) * sinf(a * 0.5f) };
+    q[0] = s * x;
+    q[1] = s * y;
+    q[2] = s * z;
+    q[3] = cos(a * 0.5f);
+  }
+}
+
+//球面補完する
+
+
 //
 // アプリケーション本体
 //
@@ -123,6 +141,8 @@ int GgApp::main(int argc, const char* const* argv)
 
     // 時刻 t にもとづく回転アニメーション
     GLfloat mr[16];                   // 回転の変換行列
+    GLfloat q[4];//単位四元数
+
     // 【宿題】ここを解答してください（下の loadIdentity() を置き換えてください）
     loadIdentity(mr);
     //まず，軸と回転角から単位余弦数を求める
