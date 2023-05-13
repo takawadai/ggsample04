@@ -25,20 +25,54 @@ constexpr auto cycle{ 5.0 };
 
 //軸と回転角から単位余弦数を求める
 //参照：授業スライド
-void qmake(GLfloat* q, float x, float y, float z, float a)
+void qmake(GLfloat *q, float x, float y, float z, float a)
 {
   const float l{ x * x + y * y + z * z };
   if (l != 0.0f)
   {
-    const float s{ sqrt(l) * sinf(a * 0.5f) };
-    q[0] = s * x;
+    const float s{ sinf(a * 0.5f) / sqrtf(l)};
+    q[0] = s * x ;
     q[1] = s * y;
     q[2] = s * z;
-    q[3] = cos(a * 0.5f);
+    q[3] = cosf(a * 0.5f);
   }
 }
 
-//球面補完する
+//球面線形補完する
+//参照：授業スライド
+void slerp(GLfloat* p, const float* q, const float* r, const float t)
+{
+  const float qr{ q[0] * r[0]
+                + q[1] * r[1]
+                + q[2] * r[2]
+                + q[3] * r[3]};
+
+  const float ss{ 1.0f - qr * qr };
+
+  if (ss == 0.0)
+  {
+    p[0] = q[0];
+    p[1] = q[1];
+    p[2] = q[2];
+    p[3] = q[3];
+  }
+  else
+  {
+    const float sp{ sqrt(ss) };
+    const float ph{ acos(qr) };
+    const float pt{ ph * t };
+    const float t1{ sin(pt) / sp };
+    const float t0{ sin(ph - pt) / sp };
+
+    p[0] = q[0] * t0 + r[0] * t1;
+    p[1] = q[1] * t0 + r[1] * t1;
+    p[2] = q[2] * t0 + r[2] * t1;
+    p[3] = q[3] * t0 + r[3] * t1;
+  }
+
+}
+
+//単位四元数から回転変換行列を得る
 
 
 //
@@ -142,7 +176,7 @@ int GgApp::main(int argc, const char* const* argv)
     // 時刻 t にもとづく回転アニメーション
     GLfloat mr[16];                   // 回転の変換行列
     GLfloat q[4];//単位四元数
-
+    
     // 【宿題】ここを解答してください（下の loadIdentity() を置き換えてください）
     loadIdentity(mr);
     //まず，軸と回転角から単位余弦数を求める
