@@ -96,7 +96,7 @@ void qrot(float* m, const float* q)
   m[9] = yz - xw;
   m[10] = 1.0f - xx - yy;
   m[3] = m[7] = m[11] =
-    m[12] = m[13] = m[14] = 0.0f;
+  m[12] = m[13] = m[14] = 0.0f;
   m[15] = 1.0f;
 }
 
