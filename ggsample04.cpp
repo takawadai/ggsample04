@@ -26,22 +26,22 @@ constexpr auto cycle{ 5.0 };
 
 //軸と回転角から単位余弦数を求める
 //参照：授業スライド
-void qmake(GLfloat *q, float x, float y, float z, float a)
+void qmake(float *q, float x, float y, float z, float a)
 {
   const float l{ x * x + y * y + z * z };
   if (l != 0.0f)
   {
-    const float s{ sinf(a * 0.5f) / sqrtf(l)};
+    const float s{ sin(a * 0.5f) / sqrt(l)};
     q[0] = s * x ;
     q[1] = s * y;
     q[2] = s * z;
-    q[3] = cosf(a * 0.5f);
+    q[3] = cos(a * 0.5f);
   }
 }
 
 //球面線形補完する
 //参照：授業スライド
-void slerp(GLfloat* p, const float* q, const float* r, const float t)
+void slerp(float* p, const float* q, const float* r, const float t)
 {
   const float qr{ q[0] * r[0]
                 + q[1] * r[1]
@@ -59,12 +59,12 @@ void slerp(GLfloat* p, const float* q, const float* r, const float t)
   }
   else
   {
-    const float sp{ sqrt(ss) };
-    const float ph{ acos(qr) };
-    const float pt{ ph * t };
-    const float t1{ sin(pt) / sp };
-    const float t0{ sin(ph - pt) / sp };
-
+    const float sp{ sqrt(ss) };//sin𝜙
+    const float ph{ acos(qr) };//𝜙
+    const float pt{ ph * t };//𝜙 * t
+    const float t0{ (sin(ph - pt) )/ sp };
+    const float t1{ sin(pt) / sp};
+  
     p[0] = q[0] * t0 + r[0] * t1;
     p[1] = q[1] * t0 + r[1] * t1;
     p[2] = q[2] * t0 + r[2] * t1;
@@ -212,12 +212,12 @@ int GgApp::main(int argc, const char* const* argv)
 
     GLfloat r[4];
 
-    // 【宿題】ここを解答してください（下の loadIdentity() を置き換えてください）
+    // 【宿題】ここを解答nしてください（下の loadIdentity() を置き換えてください）
     //loadIdentity(mr);
 
-    qmake(q, 1.0, 0.0, 0.0, 1.0);
+    qmake(q, 1.0f, 0.0f, 0.0f, 1.0f);
 
-    qmake(r, 0.0, 0.0, 1.0, 2.0);
+    qmake(r, 0.0f, 0.0f, 1.0f, 2.0f);
 
     slerp(p, q, r, t);
 
