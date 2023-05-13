@@ -73,7 +73,32 @@ void slerp(GLfloat* p, const float* q, const float* r, const float t)
 }
 
 //単位四元数から回転変換行列を得る
+//参照：授業スライド
+void qrot(float* m, const float* q)
+{
+  float xx = q[0] * q[0] * 2.0f;
+  float yy = q[1] * q[1] * 2.0f;
+  float zz = q[2] * q[2] * 2.0f;
+  float xy = q[0] * q[1] * 2.0f;
+  float yz = q[1] * q[2] * 2.0f;
+  float zx = q[2] * q[0] * 2.0f;
+  float xw = q[0] * q[3] * 2.0f;
+  float yw = q[1] * q[3] * 2.0f;
+  float zw = q[2] * q[3] * 2.0f;
 
+  m[0] = 1.0f - yy - zz;
+  m[1] = xy + zw;
+  m[2] = zx - yw;
+  m[4] = xy - zw;
+  m[5] = 1.0f - zz - xx;
+  m[6] = yz + xw;
+  m[8] = zx + yw;
+  m[9] = yz - xw;
+  m[10] = 1.0f - xx - yy;
+  m[3] = m[7] = m[11] =
+    m[12] = m[13] = m[14] = 0.0f;
+  m[15] = 1.0f;
+}
 
 //
 // アプリケーション本体
