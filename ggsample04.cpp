@@ -125,6 +125,10 @@ int GgApp::main(int argc, const char* const* argv)
     GLfloat mr[16];                   // 回転の変換行列
     // 【宿題】ここを解答してください（下の loadIdentity() を置き換えてください）
     loadIdentity(mr);
+    //まず，軸と回転角から単位余弦数を求める
+    // 次に，単位四元数を線形補完する
+    //次に，単位四元数から回転変換行列を得る．
+
 
     // 時刻 t にもとづく平行移動アニメーション
     float location[3];                // 現在位置
